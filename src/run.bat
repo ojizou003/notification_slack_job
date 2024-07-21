@@ -4,4 +4,4 @@
 
 cd /d %~dp0
 
-conda activate n_slack_nj & python main.py & python deactivate
+conda activate n_slack_nj & python main.py
