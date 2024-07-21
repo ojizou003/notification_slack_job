@@ -42,6 +42,9 @@ def get_title(KEYWORD: str):
     body = WebDriverWait(browser, 15).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "body"))
     )
+    CW_URL_R = browser.current_url
+    with open('../data/cw_url_r.pkl', 'wb') as f: 
+        pickle.dump(CW_URL_R, f)
     html = browser.page_source
     soup = BeautifulSoup(html, "lxml")
     cw_new = soup.find("ul", class_="gH9lt OW4Y6 QH0Pz").find("a").text
@@ -56,6 +59,9 @@ def get_title(KEYWORD: str):
     body = WebDriverWait(browser, 15).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "body"))
     )
+    RC_URL_R = browser.current_url
+    with open('../data/rc_url_r.pkl', 'wb') as f: 
+        pickle.dump(RC_URL_R, f)
     html = browser.page_source
     soup = BeautifulSoup(html, "lxml")
     rc_new = (
@@ -77,6 +83,9 @@ def get_title(KEYWORD: str):
     body = WebDriverWait(browser, 15).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "body"))
     )
+    CC_URL_R = browser.current_url
+    with open('../data/cc_url_r.pkl', 'wb') as f: 
+        pickle.dump(CC_URL_R, f)
     html = browser.page_source
     soup = BeautifulSoup(html, "lxml")
     cc_new = soup.find("div", class_="c-itemInfo_title").text.replace("\n", "").strip()
@@ -106,7 +115,9 @@ def notify_newjob(cw_new, rc_new, cc_new):
 
     # クラウドワークスに新しい仕事があった場合、スラックにメッセージを送り、cw.pklを更新する
     if cw != cw_new:
-        message = f"クラウドワークスに新しい仕事があります\n{cw_new}"
+        with open('../data/cw_url_r.pkl', 'rb') as f:
+            CW_URL_R = pickle.load(f)
+        message = f"クラウドワークスに新しい仕事があります\n{cw_new}\n{CW_URL_R}"
         payload = {"text": message}
         requests.post(WEB_HOOK_URL, json=payload)
         cw = cw_new
@@ -114,10 +125,13 @@ def notify_newjob(cw_new, rc_new, cc_new):
             pickle.dump(cw, f)
     else:
         pass
+    sleep(1)
 
     # ランサーズに新しい仕事があった場合、スラックにメッセージを送り、rc.pklを更新する
     if rc != rc_new:
-        message = f"ランサーズに新しい仕事があります\n{rc_new}"
+        with open('../data/rc_url_r.pkl', 'rb') as f:
+            RC_URL_R = pickle.load(f)
+        message = f"ランサーズに新しい仕事があります\n{rc_new}\n{RC_URL_R}"
         payload = {"text": message}
         requests.post(WEB_HOOK_URL, json=payload)
         rc = rc_new
@@ -125,10 +139,13 @@ def notify_newjob(cw_new, rc_new, cc_new):
             pickle.dump(rc, f)
     else:
         pass
+    sleep(1)
 
     # ココナラに新しい仕事があった場合、スラックにメッセージを送り、cc.pklを更新する
     if cc != cc_new:
-        message = f"ココナラに新しい仕事があります\n{cc_new}"
+        with open('../data/cc_url_r.pkl', 'rb') as f:
+            CC_URL_R = pickle.load(f)
+        message = f"ココナラに新しい仕事があります\n{cc_new}\n{CC_URL_R}"
         payload = {"text": message}
         requests.post(WEB_HOOK_URL, json=payload)
         cc = cc_new
@@ -136,3 +153,4 @@ def notify_newjob(cw_new, rc_new, cc_new):
             pickle.dump(cc, f)
     else:
         pass
+    sleep(1)
