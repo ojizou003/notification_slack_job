@@ -4,6 +4,7 @@
 クラウドワークス、ランサーズ、ココナラでキーワード検索に合致する新しい仕事が発生したら、スラックで通知する
 
 ## フォルダ構成
+<pre>
 notification_slack_job
 ├── data
 │   ├── cc.pkl
@@ -15,6 +16,7 @@ notification_slack_job
 │   └── run.bat
 ├── README.md
 └── requirements.txt
+</pre>
 
 ## 使い方
 1. python3.11の仮想環境を'n_slack_nj'という名前で作成
