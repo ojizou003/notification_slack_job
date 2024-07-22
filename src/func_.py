@@ -37,6 +37,7 @@ def get_title(KEYWORD: str):
         EC.presence_of_all_elements_located((By.TAG_NAME, "body"))
     )
     browser.implicitly_wait(5)
+    browser.find_element(By.CSS_SELECTOR, 'input._o6He').click()
     browser.find_element(By.NAME, "search[keywords]").send_keys(KEYWORD)
     browser.find_element(By.CSS_SELECTOR, "button.HuexB").click()
     body = WebDriverWait(browser, 15).until(
