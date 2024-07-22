@@ -31,7 +31,8 @@ def get_title(KEYWORD: str):
     browser = webdriver.Chrome(options=options, service=service)
     browser.maximize_window()
 
-    # クラウドワークスの先頭のタイトルを取得
+    # Ｘ クラウドワークスの先頭のタイトルを取得
+    # 〇 クラウドワークスは新着が必ずしも先頭にこないのでsoup全体を取得
     browser.get(CW_URL)
     body = WebDriverWait(browser, 15).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "body"))
@@ -48,7 +49,7 @@ def get_title(KEYWORD: str):
         pickle.dump(CW_URL_R, f)
     html = browser.page_source
     soup = BeautifulSoup(html, "lxml")
-    cw_new = soup.find("ul", class_="gH9lt OW4Y6 QH0Pz").find("a").text
+    cw_new = soup
 
     # ランサーズの先頭のタイトルを取得
     browser.get(RC_URL)
@@ -118,7 +119,7 @@ def notify_newjob(cw_new, rc_new, cc_new):
     if cw != cw_new:
         with open('../data/cw_url_r.pkl', 'rb') as f:
             CW_URL_R = pickle.load(f)
-        message = f"クラウドワークスに新しい仕事があります\n{cw_new}\n{CW_URL_R}"
+        message = f"クラウドワークスに新しい仕事があります\n{CW_URL_R}"
         payload = {"text": message}
         requests.post(WEB_HOOK_URL, json=payload)
         cw = cw_new
