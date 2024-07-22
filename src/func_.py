@@ -32,7 +32,7 @@ def get_title(KEYWORD: str):
     browser.maximize_window()
 
     # Ｘ クラウドワークスの先頭のタイトルを取得
-    # 〇 クラウドワークスは新着が必ずしも先頭にこないのでsoup全体を取得
+    # 〇 クラウドワークスは新着が必ずしも先頭にこないのでul全体の文字列を取得
     browser.get(CW_URL)
     body = WebDriverWait(browser, 15).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "body"))
@@ -49,7 +49,7 @@ def get_title(KEYWORD: str):
         pickle.dump(CW_URL_R, f)
     html = browser.page_source
     soup = BeautifulSoup(html, "lxml")
-    cw_new = soup
+    cw_new = soup.find('ul', class_='gH9lt OW4Y6 QH0Pz').find('a').text
 
     # ランサーズの先頭のタイトルを取得
     browser.get(RC_URL)
