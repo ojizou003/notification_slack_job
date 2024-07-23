@@ -26,13 +26,13 @@ def get_title(KEYWORD: str):
 
     driver_path = ChromeDriverManager().install()
     options = Options()
+    options.add_argument("--incognito")
     options.add_argument("--headless")
     service = Service(executable_path=driver_path)
     browser = webdriver.Chrome(options=options, service=service)
     browser.maximize_window()
 
-    # Ｘ クラウドワークスの先頭のタイトルを取得
-    # 〇 クラウドワークスは新着が必ずしも先頭にこないのでul全体の文字列を取得
+    # クラウドワークスの先頭のタイトルを取得
     browser.get(CW_URL)
     body = WebDriverWait(browser, 15).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "body"))
